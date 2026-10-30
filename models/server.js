@@ -1,31 +1,62 @@
-import express from "express";
-import "dotenv/config";
+import express from "express"
+import "dotenv/config"
+import cors from "cors"
+import router from "../routes/users.js";
 
-export class Server{
-    constructor(){
+class Server {
+    constructor() {
         this.app = express();
         this.port = process.env.PORT || 3001;
 
-        this.middlewares();
-        this.routes();
-    }
-    //Segundo Metodo de mi clase server.
-    routes(){
-        this.app.get("/", (req,res) =>{
-            res.send({
-                message: "Hola mundo de mi servidor."
-            })
-        });
-    }
-    //Metodo 3 de mi clase server
-    middlewares(){
-        this.app.use(express.static("public"));
+        this.middlewares()
+
+        //this.routes()
+        this.usuariosPath = "/api/usuarios"
     }
 
-    //Primer metodo de mi clase server
+    routes() {
+        this.app.use("/api/usuarios", router)
+        //    this.app.get(`/test`, (req, res) => {
+        //        res.send({
+        //             message: "Hola mundo desde el servidor"
+        //         })
+        //     })
+        // 
+        //     this.app.get(`/api`, (req, res) => {
+        //         res.send({
+        //             msg: "GET - Server"
+        //         })
+        //     })
+        // 
+        //     this.app.post(`/api`, (req, res) => {
+        //         res.send({
+        //             msg: "POST - Server"
+        //         })
+        //     })
+        //     
+        //     this.app.put(`/api`, (req, res) => {
+        //         res.send({
+        //             msg: "PUT - Server"
+        //         })
+        //     })
+        //     
+        //     this.app.delete(`/api`, (req, res) => {
+        //         res.send({
+        //             msg: "DELETE - Server"
+        //         })
+        //     })
+     }
+    // Método 3 de mi clase Server
+    middlewares() {
+        this.app.use(cors())
+        this.app.use(express.static("public"));
+        this.app.use(express.json())
+    }
+
+    // Primer Metodo de mi Clase Server
     listen(){
         this.app.listen(this.port, () => {
-            console.log(`Servidor corriendo en el puerto: ${this.port} `);
+            console.log(`Servidor corriendo en el puerto: ${this.port}`);
         })
     }
 }
